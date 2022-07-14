@@ -1,18 +1,21 @@
 package com.zdaniel.countit.counter.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Counter {
 
     private String name;
-    private Integer count = 0;
+    private final AtomicInteger count = new AtomicInteger(0);
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Counter() {
     }
 
     public Counter(String name, Integer count) {
         this.name = name;
-        this.count = count;
+        this.count.set(count);
     }
 
     public String getName() {
@@ -24,11 +27,15 @@ public class Counter {
     }
 
     public Integer getCount() {
-        return count;
+        return count.get();
     }
 
     public void setCount(Integer count) {
-        this.count = count;
+        this.count.set(count);
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override

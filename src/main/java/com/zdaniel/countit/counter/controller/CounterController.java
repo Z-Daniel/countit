@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(CounterController.ROOT_PATH)
+@CrossOrigin(origins = "http://localhost:4200")
 public class CounterController {
     static final String ROOT_PATH = "/api/counter";
 
