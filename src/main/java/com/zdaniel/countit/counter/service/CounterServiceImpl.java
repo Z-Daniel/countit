@@ -36,10 +36,8 @@ public class CounterServiceImpl implements CounterService {
     }
 
     @Override
-    public CounterDTO update(String name, CounterDTO dto) {
-        dto.setName(name);
-        Counter counter = counterMapper.toEntity(dto);
-        return counterMapper.toDTO(counterRepository.update(counter));
+    public CounterDTO incrementCounterByName(String name) {
+        return counterMapper.toDTO(counterRepository.incrementCounterByName(name));
     }
 
 }

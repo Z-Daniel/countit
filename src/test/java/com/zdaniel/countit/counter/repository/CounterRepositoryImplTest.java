@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.zdaniel.countit.counter.repository.CounterRepositoryImpl.COUNTER_IS_NULL_ERROR;
-import static com.zdaniel.countit.counter.repository.CounterRepositoryImpl.COUNTER_NOT_FOUND_BY_NAME_ERROR;
+import static com.zdaniel.countit.counter.repository.CounterRepositoryImpl.*;
 
 public class CounterRepositoryImplTest {
 
@@ -59,9 +58,9 @@ public class CounterRepositoryImplTest {
     }
 
     @Test
-    public void update_should_throw_error_when_null_passed() {
-        EmptyDataException ex = Assertions.assertThrows(EmptyDataException.class, () -> counterRepository.update(null));
-        Assertions.assertEquals(COUNTER_IS_NULL_ERROR, ex.getMessage());
+    public void increment_by_name_should_throw_error_when_null_passed() {
+        EmptyDataException ex = Assertions.assertThrows(EmptyDataException.class, () -> counterRepository.incrementCounterByName(null));
+        Assertions.assertEquals(COUNTER_NAME_IS_NULL_ERROR, ex.getMessage());
     }
 
     @Test

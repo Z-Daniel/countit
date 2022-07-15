@@ -14,6 +14,7 @@ public class CounterRepositoryImpl implements CounterRepository {
     public static final String UNIQUE_COUNTER_NAME_ERROR = "A counter already exists with name: ";
     public static final String COUNTER_NOT_FOUND_BY_NAME_ERROR = "No counter found with name: ";
     public static final String COUNTER_IS_NULL_ERROR = "Counter should not be null";
+    public static final String COUNTER_NAME_IS_NULL_ERROR = "Counter name should not be null";
 
     private final Map<String, Counter> counterStore = new ConcurrentHashMap<>();
 
@@ -32,11 +33,10 @@ public class CounterRepositoryImpl implements CounterRepository {
         return counter;
     }
 
-    @Override
-    public Counter update(Counter counter) {
-        throwExceptionIfCounterIsNull(counter);
-        Counter storedCounter = findByNameOrElseThrow(counter.getName());
-        storedCounter.setCount(counter.getCount());
+    public Counter incrementCounterByName(String name) {
+        if (null == name) throw new EmptyDataException(COUNTER_NAME_IS_NULL_ERROR);
+        Counter storedCounter = findByNameOrElseThrow(name);
+        storedCounter.incrementCount();
         return storedCounter;
     }
 

@@ -9,6 +9,6 @@ public interface CounterService {
     List<CounterDTO> findAll();
     CounterDTO findByName(String name);
     CounterDTO create(CounterDTO dto);
-    CounterDTO update(String name, CounterDTO dto);
+    CounterDTO incrementCounterByName(String name);
 
 }

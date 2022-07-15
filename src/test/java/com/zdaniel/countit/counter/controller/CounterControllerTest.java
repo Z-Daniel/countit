@@ -13,10 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.function.Function;
 
 import static com.zdaniel.countit.counter.repository.CounterRepositoryImpl.COUNTER_NOT_FOUND_BY_NAME_ERROR;
 import static com.zdaniel.countit.counter.repository.CounterRepositoryImpl.UNIQUE_COUNTER_NAME_ERROR;
@@ -45,7 +41,6 @@ public class CounterControllerTest {
         counterRepository.deleteAll();
     }
 
-    // TODO test Location header
     @Test
     public void givenDTO_whenCreate_thenReturnSavedDTO() throws Exception {
         ResultActions response = sendPostRequest(dto);
@@ -69,18 +64,17 @@ public class CounterControllerTest {
         counterRepository.create(counter);
         dto.setCount(1);
 
-        ResultActions response = sendPutRequest(dto);
+        ResultActions response = mockMvc.perform(put(CounterController.ROOT_PATH + "/" + counter.getName()));
 
         expectResponseBodyMatchingWithDTO(response, status().isOk());
     }
 
     @Test
-    public void givenEmptyStore_whenUpdate_ThenReturnSavedDTO() throws Exception {
-        CounterDTO dto = new CounterDTO("TEST_COUNTER", 0);
-
-        ResultActions response = sendPutRequest(dto);
-
-        expectResponseBodyMatchingWithDTO(response, status().isCreated());
+    public void givenEmptyStore_whenIncrementCounterByName_ThenReturnError() throws Exception {
+        String counterName = "TEST_COUNTER";
+        mockMvc.perform(put(CounterController.ROOT_PATH + "/" + counterName))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(COUNTER_NOT_FOUND_BY_NAME_ERROR + counterName));
     }
 
     @Test
@@ -120,21 +114,10 @@ public class CounterControllerTest {
     }
 
     private ResultActions sendPostRequest(CounterDTO dto) throws Exception {
-        return sendHttpRequestWithJSONContent(dto, MockMvcRequestBuilders::post);
-    }
-
-    private ResultActions sendPutRequest(CounterDTO dto) throws Exception {
-        return sendHttpRequestWithJSONContent(CounterController.ROOT_PATH + "/" + dto.getName(), dto, MockMvcRequestBuilders::put);
-    }
-
-    private ResultActions sendHttpRequestWithJSONContent(CounterDTO dto, Function<String, MockHttpServletRequestBuilder> requestMethodProvider) throws Exception {
-        return sendHttpRequestWithJSONContent(CounterController.ROOT_PATH, dto, requestMethodProvider);
-    }
-
-    private ResultActions sendHttpRequestWithJSONContent(String path, CounterDTO dto, Function<String, MockHttpServletRequestBuilder> requestMethodProvider) throws Exception {
-        return mockMvc.perform(requestMethodProvider.apply(path)
+        return mockMvc.perform(post(CounterController.ROOT_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)));
     }
+
 
 }

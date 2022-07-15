@@ -69,16 +69,15 @@ public class CounterServiceImplTest {
     }
 
     @Test
-    public void update() {
+    public void increment_counter_by_name() {
         String counterName = "TEST_COUNTER";
         Counter entity = new Counter(counterName, 5);
         CounterDTO expected = new CounterDTO(counterName, 5);
 
-        when(counterMapper.toEntity(expected)).thenReturn(entity);
-        when(counterRepository.update(entity)).thenReturn(entity);
+        when(counterRepository.incrementCounterByName("TEST_COUNTER")).thenReturn(entity);
         when(counterMapper.toDTO(entity)).thenReturn(expected);
 
-        CounterDTO actual = counterService.update(counterName, expected);
+        CounterDTO actual = counterService.incrementCounterByName(counterName);
 
         assertEquals(expected, actual);
     }

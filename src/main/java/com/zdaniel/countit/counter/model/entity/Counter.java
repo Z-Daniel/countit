@@ -30,8 +30,8 @@ public class Counter {
         return count.get();
     }
 
-    public void setCount(Integer count) {
-        this.count.set(count);
+    public void incrementCount() {
+        count.incrementAndGet();
     }
 
     public LocalDateTime getCreatedAt() {

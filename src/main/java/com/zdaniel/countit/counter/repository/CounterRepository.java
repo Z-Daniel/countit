@@ -9,7 +9,7 @@ public interface CounterRepository {
     List<Counter> findAll();
     Counter findByNameOrElseThrow(String name);
     Counter create(Counter counter);
-    Counter update(Counter counter);
+    Counter incrementCounterByName(String name);
     void deleteAll();
 
 }
